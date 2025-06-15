@@ -1,4 +1,4 @@
-from flask import Flask, session, render_template
+from flask import Flask, session, render_template, redirect
 app = Flask(__name__)
 import os
 from forms import LoginForm
@@ -23,4 +23,7 @@ def index():
 @app.route('/login')
 def login():
     form = LoginForm()
+    if form.validate_on_submit() and form.password.data == os.getenv('PASSWORD'):
+        session["authenticated"] == True
+        return redirect('/')
     return render_template('login.html', form=form)
