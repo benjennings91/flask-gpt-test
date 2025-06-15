@@ -1,8 +1,11 @@
-from flask import Flask
+from flask import Flask, session, render_template
 app = Flask(__name__)
+import os
+PASSWORD = os.getenv("PASSWORD")
+app.secret_key = os.getenv("secret_key")
 
 @app.route('/')
-def hello_world():
+def index():
     from openai import OpenAI
     client = OpenAI()
 
