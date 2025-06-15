@@ -8,7 +8,7 @@ app.secret_key = os.getenv("secret_key")
 @app.route('/')
 def index():
     from openai import OpenAI
-    if session["authenticated"]:
+    if session.get("authenticated"):
         client = OpenAI()
 
         response = client.responses.create(
