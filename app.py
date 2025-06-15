@@ -20,7 +20,7 @@ def index():
     else:
         return "Access Denied"
 
-@app.route('/login')
+@app.route('/login', methods=['GET', 'POST'])
 def login():
     form = LoginForm()
     if form.validate_on_submit() and form.password.data == os.getenv('PASSWORD'):
