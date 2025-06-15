@@ -24,6 +24,6 @@ def index():
 def login():
     form = LoginForm()
     if form.validate_on_submit() and form.password.data == os.getenv('PASSWORD'):
-        session["authenticated"] == True
+        session["authenticated"] = True
         return redirect('/')
     return render_template('login.html', form=form)
