@@ -1,0 +1,34 @@
+<html>
+<head>
+<link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
+</head>
+<body>
+{% if round < 7 %}
+<h1>Round {{round}}: {{ info.title }}</h1>
+{% else %}
+<h1>Conclusion</h1>
+{% endif %}
+<h2>Score: {{ info.score }}</h2>
+{% if round == 1 %}
+<h2>Background</h2>
+<p>{{ info.background }}</p>
+{% else %}
+<h2>Choice</h2>
+<p>{{ info.player_choice }}</p>
+<h2>Subsequent Events</h2>
+<p>{{ info.events }}</p>
+{% endif %}
+{% if round < 7 %}
+<h2>Make Your Choice!</h2>
+<form method="POST">
+    {{ form.hidden_tag() }}
+    {% for option in form.abcd %}
+        <p>{{ option() }} {{ option.label }} </p>
+    {% endfor %}
+    <p>{{ form.submit() }}</p>
+</form>
+{% else %}
+<p><a href="/">Restart</a></p>
+{% endif %}
+</body>
+</html>
