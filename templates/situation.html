@@ -20,15 +20,23 @@
 {% endif %}
 {% if round < 7 %}
 <h2>Make Your Choice!</h2>
-<form method="POST">
+<form id="abcdForm" method="POST">
     {{ form.hidden_tag() }}
     {% for option in form.abcd %}
         <p>{{ option() }} {{ option.label }} </p>
     {% endfor %}
-    <p>{{ form.submit() }}</p>
+    <p>{{ form.submit(id="submit-button") }}</p>
 </form>
 {% else %}
 <p><a href="/">Restart</a></p>
 {% endif %}
+<script>
+    const form = document.getElementById('abcdForm')
+    const btn = document.getElementById('submit-button');
+    form.addEventListener('submit', function () {
+        btn.disabled = true;
+        btn.value = 'Submitting...';
+    });
+</script>
 </body>
 </html>

@@ -25,7 +25,7 @@ class LaterResponse(BaseModel):
 
 @app.route('/', methods=['GET', 'POST'])
 def index():
-    session["authenticated"] = True
+    #session["authenticated"] = True
     if not session.get("authenticated"):
         return "Access Denied"
     from openai import OpenAI
@@ -55,7 +55,7 @@ def index():
     
 @app.route('/ceo', methods=['GET', 'POST'])
 def ceo():
-    session["authenticated"] = True
+    #session["authenticated"] = True
     if not session.get("authenticated"):
         return "Access Denied"
     from openai import OpenAI
@@ -90,3 +90,9 @@ def login():
         session["authenticated"] = True
         return redirect('/')
     return render_template('login.html', form=form)
+ 
+@app.route('/logout')
+def logout():
+    session.clear()
+    return redirect('/')
+    
