@@ -1,0 +1,6 @@
+Flask
+Gunicorn
+openai
+flask_wtf
+wtforms
+flask_session
