@@ -1,7 +1,7 @@
-from flask import Flask, session, render_template, redirect
+from flask import Flask, session, render_template, redirect, request
 app = Flask(__name__)
 import os
-from forms import LoginForm, abcdForm
+from forms import LoginForm, abcdForm, pythonHelpForm
 from pydantic import BaseModel
 from flask_session import Session
 PASSWORD = os.getenv("PASSWORD")
@@ -95,4 +95,44 @@ def login():
 def logout():
     session.clear()
     return redirect('/')
+    
+@app.route('/decrypt')
+def decrypt():
+    def generate_random_mapping():
+        import random
+        alphabet = [l for l in "ABCDEFGHIJKLMNOPQRRSTUVWXYZ"]
+        encrypt = alphabet[::]
+        random.shuffle(encrypt)
+        mapping = dict()
+        for i in range(len(alphabet)):
+            mapping[alphabet[i]] = encrypt[i]
+        return mapping
+    task = request.args.get('task')
+    if task == "demo":
+        plain_text = "I am a man. I see the sun and the sky. The sun is hot and bright. A dog ran to me. It is a big dog. The dog barked at a cat. The cat ran fast into a bush. I went to see the cat, but it was gone. A bird flew up into the tree and sang a short song. I stood and listened for a while.".upper()
+    elif task == '1':
+        plain_text = "The cat is on the mat. It is a fat cat. I see it run. It ran fast and sat on the mat. A mat is flat. The dog barked at the cat. Then the cat jumped up on a shelf. The dog sniffed the mat and wagged its tail. I laughed as the cat stared down from above. The wind blew the curtain, and the sun shone in.".upper()
+    elif task == '2':
+        plain_text = "You and I are at the park. The sun is up and the sky is blue. A bird flew by. It was fast and high. The wind moved the leaves on the trees. A squirrel ran across the grass and stopped to look at us. We sat on a bench and watched the ducks swim in the pond. It was calm, and I felt glad to be there with you.".upper()
+    else:
+        plain_text = "AAAAAAAAAA"
+    return render_template('decrypt_challenge.html', plain_text = plain_text, encryption_mapping = generate_random_mapping() )
+    
+    
+# @app.route('/python_coach', methods=['GET', 'POST'])
+# def python_coach():
+    # form = pythonHelpForm()
+    # from openai import OpenAI
+    # client = OpenAI()
+    # task = 'Write code to implement the following tassk: FizzBuzz is a programming task where the objective is to print the numbers from 1 up to a given limit. For numbers that are multiples of 3, the word "Fizz" is printed instead of the number. For multiples of 5, the word "Buzz" is used. If a number is divisible by both 3 and 5, "FizzBuzz" is printed in place of the number. All other numbers are printed normally.'
+    # help_text = ""
+    # if form.validate_on_submit():
+        # response = client.responses.create(
+            # model="gpt-4.1-mini",
+            # input = "Help the student write code to complete the following task:\nSTART_OF_TASK_DESCRIPTION\n" + task + "\nEND_OF_TASK_DESCRIPTION\nSo far they have written the following code.\n START_OF_STUDENT_CODE\n" + form.code.data + " END_OF_STUDENT_CODE Please try and assist by asking questions that will make the student think of what they should change next. The process can be iterative, i.e. they can make a change and then press the help button again. Just respond with the advice, no acknowledgement."
+            # )
+        # help_text = response.output_text
+        # print(form.code.data)
+    # return render_template("python_coach.html", form = form, task = task, help_text = help_text)
+        
     

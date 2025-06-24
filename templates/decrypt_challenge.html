@@ -1,0 +1,154 @@
+<html>
+<head>
+ <style>
+    h1, h2 {
+        text-align: center;
+    }
+    .textsContainer {
+        display: flex;
+        justify-content: center;
+    }
+    .textDivs {
+        margin: 20px auto;
+    }
+    .texts {
+        margin: 20px auto;
+        font-size: 1.2em;
+    }
+    .container {
+      display: grid;
+      grid-template-columns: repeat(13, 40px);
+      gap: 10px;
+      max-width: 600px;
+      margin: 20px auto;
+    }
+    .char-input {
+      width: 40px;
+      height: 40px;
+      text-align: center;
+      font-size: 1.2em;
+      text-transform: uppercase;
+    }
+    label {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      font-size: 1em;
+    }
+    .buttonContainer {
+        display: flex;
+        justify-content: center;
+    }
+  </style>
+
+</head>
+<body>
+<h1>Decryption Challenge!</h1>
+<div class="textsContainer">
+<div class="textDivs">
+<h2>Cipher Text</h2>
+<textarea id="cipherText" class="texts" rows="10" cols="60" readonly>This is the cipher text</textarea>
+</div>
+<div class="textDivs">
+<h2>Plain Text</h2>
+<textarea id="plainText" class="texts" rows="10" cols="60" readonly></textarea>
+</div>
+</div>
+<div class="container" id="alphabetInputs"></div>
+
+  <script>
+    const encryptionMap = {{ encryption_mapping | tojson }};
+    const plain_text = "{{ plain_text }}".toUpperCase();
+    let cipher_text = ""
+    for (char of plain_text) {
+        if (char >= 'A' && char <= 'Z') {
+            cipher_text += encryptionMap[char].toLowerCase()
+        }
+        else {
+            cipher_text += char
+        }
+    }
+    document.getElementById("cipherText").value = cipher_text;
+    document.getElementById("plainText").value = cipher_text;
+    const container = document.getElementById("alphabetInputs");
+
+    for (let i = 0; i < 26; i++) {
+      const letter = String.fromCharCode(97 + i); // a-z
+      const label = document.createElement("label");
+
+      const input = document.createElement("input");
+      input.type = "text";
+      input.maxLength = 1;
+      input.className = "char-input";
+      input.id = `input-${letter}`;
+
+      // Optional: Only allow letters
+      input.addEventListener("input", () => {
+        input.value = input.value.toUpperCase().replace(/[^A-Z]/g, "");
+      });
+
+      label.textContent = letter;
+      label.appendChild(input);
+      container.appendChild(label);
+    }
+  </script>
+  
+  <div class="buttonContainer">
+  <button onclick=update()>Update</button>
+  </div>
+  <p id="counts"></p>
+  <script>
+  function getReplacementMap() {
+    const map = {};
+    for (let i = 0; i < 26; i++) {
+    const letter = String.fromCharCode(97 + i); // 'A' to 'Z'
+    const input = document.getElementById(`input-${letter}`);
+    if (input && input.value) {
+      map[letter] = input.value.toUpperCase(); // or .toLowerCase(), as needed
+    }
+  }
+  return map;
+  }
+  
+  function replaceString(str, map) {
+  return str.split('').map(char => {
+    const lowerChar = char.toLowerCase();
+    if (map[lowerChar]) {
+      // Preserve case if desired
+      return char === lowerChar ? map[lowerChar] : map[lowerChar].toUpperCase();
+    }
+    return char;
+  }).join('');
+    }
+    
+  
+  function count(str) {
+    const counts = {};
+    for (let i = 0; i < 26; i++) {
+        const letter = String.fromCharCode(97 + i);
+        counts[letter] = 0;
+    }
+    console.log(counts)
+    console.log(str)
+    for (char of str) {
+        counts[char] += 1;
+    }
+    console.log(counts)
+    let count_text = ""
+    for (let i = 0; i < 26; i++) {
+        const letter = String.fromCharCode(97 + i); 
+        count_text += letter + ": " + counts[letter] + ", ";
+    }
+    document.getElementById("counts").innerText = count_text;
+  }
+  
+  function update() {
+  const replacementMap = getReplacementMap();
+  const result = replaceString(document.getElementById("cipherText").value, replacementMap);
+  document.getElementById("plainText").value = result;
+  count(document.getElementById("cipherText").value);
+  }
+</script>
+
+</body>
+</html>

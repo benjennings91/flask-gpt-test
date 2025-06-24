@@ -1,5 +1,5 @@
 from flask_wtf import FlaskForm
-from wtforms import PasswordField, SubmitField, RadioField
+from wtforms import PasswordField, SubmitField, RadioField, HiddenField
 from wtforms.validators import DataRequired
 
 class LoginForm(FlaskForm):
@@ -9,3 +9,7 @@ class LoginForm(FlaskForm):
 class abcdForm(FlaskForm):
   abcd = RadioField('Make your choice:', choices=[('A','A'), ('B','B'),('C','C'),('D','D')], default='A')
   submit= SubmitField('Submit')
+  
+class pythonHelpForm(FlaskForm):
+  code = HiddenField()
+  submit = SubmitField('Get Help')
