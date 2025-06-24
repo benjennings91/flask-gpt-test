@@ -55,7 +55,7 @@ def index():
     
 @app.route('/ceo', methods=['GET', 'POST'])
 def ceo():
-    #session["authenticated"] = True
+    session["authenticated"] = True
     if not session.get("authenticated"):
         return "Access Denied"
     from openai import OpenAI

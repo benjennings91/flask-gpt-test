@@ -1,6 +1,10 @@
 <html>
 <head>
  <style>
+    body {
+        background-color: SlateGray;
+        color: white;
+    }
     h1, h2 {
         text-align: center;
     }
@@ -13,7 +17,9 @@
     }
     .texts {
         margin: 20px auto;
-        font-size: 1.2em;
+        font-size: 1.6em;
+        background-color: LightSlateGray;
+        color: white;
     }
     .container {
       display: grid;
@@ -28,12 +34,14 @@
       text-align: center;
       font-size: 1.2em;
       text-transform: uppercase;
+      color: white;
+      background-color: LightSlateGray;
     }
     label {
       display: flex;
       flex-direction: column;
       align-items: center;
-      font-size: 1em;
+      font-size: 1.6em;
     }
     .buttonContainer {
         display: flex;
@@ -47,11 +55,11 @@
 <div class="textsContainer">
 <div class="textDivs">
 <h2>Cipher Text</h2>
-<textarea id="cipherText" class="texts" rows="10" cols="60" readonly>This is the cipher text</textarea>
+<textarea id="cipherText" class="texts" rows="10" cols="40" readonly>This is the cipher text</textarea>
 </div>
 <div class="textDivs">
 <h2>Plain Text</h2>
-<textarea id="plainText" class="texts" rows="10" cols="60" readonly></textarea>
+<textarea id="plainText" class="texts" rows="10" cols="40" readonly></textarea>
 </div>
 </div>
 <div class="container" id="alphabetInputs"></div>
