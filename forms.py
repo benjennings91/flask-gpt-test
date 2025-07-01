@@ -1,5 +1,5 @@
 from flask_wtf import FlaskForm
-from wtforms import PasswordField, SubmitField, RadioField, HiddenField
+from wtforms import PasswordField, SubmitField, RadioField, HiddenField, DecimalField, IntegerField
 from wtforms.validators import DataRequired
 
 class LoginForm(FlaskForm):
@@ -13,3 +13,9 @@ class abcdForm(FlaskForm):
 class pythonHelpForm(FlaskForm):
   code = HiddenField()
   submit = SubmitField('Get Help')
+  
+class tradingForm(FlaskForm):
+    pounds = DecimalField()
+    crypto = IntegerField()
+    price = HiddenField()
+    submit = SubmitField('Next Round')
