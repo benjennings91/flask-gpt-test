@@ -1,7 +1,7 @@
 from flask import Flask, session, render_template, redirect, request
 app = Flask(__name__)
 import os
-from forms import LoginForm, abcdForm, pythonHelpForm, tradingForm
+from forms import LoginForm, abcdForm, pythonHelpForm
 from pydantic import BaseModel
 from flask_session import Session
 PASSWORD = os.getenv("PASSWORD")
@@ -117,31 +117,6 @@ def decrypt():
     else:
         plain_text = "AAAAAAAAAA"
     return render_template('decrypt_challenge.html', plain_text = plain_text, encryption_mapping = generate_random_mapping() )
-    
-@app.route('/trade', methods=['GET', 'POST'])
-def trade():
-    form = tradingForm()
-    if form.validate_on_submit():
-        import csv
-        import random
-        with open('data/crypto_event_price_effects_50.csv', newline='') as csvfile:
-            reader = csv.DictReader(csvfile)
-            rows = list(reader)
-            row = random.choice(rows)
-            event = row["Description"]
-            multiplier = round(float(row["Multiplier"]),2)
-        price = float(form.price.data)
-        price *= multiplier
-        form.price.data = round(price, 2)
-    else:
-        START_PRICE = 40.0
-        START_AMOUNT = 1000.0
-        event = f"You've just opened your crypto trading account with £{START_AMOUNT}. The current crypto price is £{START_PRICE}."
-        multiplier = 1.0
-        form.price.data = START_PRICE
-        form.pounds.data = START_AMOUNT
-        form.crypto.data = 0
-    return render_template('trading.html', form=form, event=event, multiplier=multiplier)
     
     
 # @app.route('/python_coach', methods=['GET', 'POST'])
