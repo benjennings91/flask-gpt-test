@@ -143,6 +143,29 @@ def trade():
         form.crypto.data = 0
     return render_template('trading.html', form=form, event=event, multiplier=multiplier)
     
+@app.route('/stress')
+def stress():
+    import time
+    from openai import OpenAI
+    from concurrent.futures import ThreadPoolExecutor
+    client = OpenAI()
+
+    def resp_time():
+        start = time.time()
+        response = client.responses.parse(
+            model="gpt-4.1-nano",
+            input=[{ "role": "user", "content": "Please generate a scenario where player is the CEO of a company coming under cyber attack. Initially set the background (~ 250 words) and then at each step give four possible choices (labelled A, B, C, and D) for what choices the user (as CEO) can make. Some choices should be good, while others are mistakes. After each step generate what happens next and further choices (both good and bad). The scenario and choices should be understandable by a 14 year old, if there is anything complex, provide an extra explanation. For the first round please generate a scenario title, some background information, and options for what to do, set the player's starting score (that measures how well they are managing the crisis) to 1000. For later rounds (e.g. after the player has responded for the first time) generate a text that gives the players choice, a description of what events happens (~ 150 words) next, and the again options for what to do. Update the player's score based on their choices (a score closer to 1000 indicates perfect handling, a lower score worse handling)."}],
+            text_format = FirstResponse
+        )
+        end = time.time()
+        return end-start
+
+    with ThreadPoolExecutor(max_workers=30) as executor:
+        futures = [executor.submit(resp_time) for i in range(30)]
+        results = [f.result() for f in futures]
+    return str(results)
+
+    
     
 # @app.route('/python_coach', methods=['GET', 'POST'])
 # def python_coach():
