@@ -1,7 +1,7 @@
 from flask import Flask, session, render_template, redirect, request
 app = Flask(__name__)
 import os
-from forms import LoginForm, abcdForm, pythonHelpForm, tradingForm
+from forms import LoginForm, abcdForm, tradingForm, pythonMCQForm
 from pydantic import BaseModel
 from flask_session import Session
 PASSWORD = os.getenv("PASSWORD")
@@ -143,21 +143,42 @@ def trade():
         form.crypto.data = 0
     return render_template('trading.html', form=form, event=event, multiplier=multiplier)
     
-    
-# @app.route('/python_coach', methods=['GET', 'POST'])
-# def python_coach():
-    # form = pythonHelpForm()
-    # from openai import OpenAI
-    # client = OpenAI()
-    # task = 'Write code to implement the following tassk: FizzBuzz is a programming task where the objective is to print the numbers from 1 up to a given limit. For numbers that are multiples of 3, the word "Fizz" is printed instead of the number. For multiples of 5, the word "Buzz" is used. If a number is divisible by both 3 and 5, "FizzBuzz" is printed in place of the number. All other numbers are printed normally.'
-    # help_text = ""
-    # if form.validate_on_submit():
-        # response = client.responses.create(
-            # model="gpt-4.1-mini",
-            # input = "Help the student write code to complete the following task:\nSTART_OF_TASK_DESCRIPTION\n" + task + "\nEND_OF_TASK_DESCRIPTION\nSo far they have written the following code.\n START_OF_STUDENT_CODE\n" + form.code.data + " END_OF_STUDENT_CODE Please try and assist by asking questions that will make the student think of what they should change next. The process can be iterative, i.e. they can make a change and then press the help button again. Just respond with the advice, no acknowledgement."
-            # )
-        # help_text = response.output_text
-        # print(form.code.data)
-    # return render_template("python_coach.html", form = form, task = task, help_text = help_text)
+@app.route('/next_word')
+def next_word():
+    topic = request.args.get('topic')
+    if topic == "general":
+        with open('data/general_sentences.txt') as file:
+            texts = file.readlines()
+            theme = "General"
+    elif topic == "mercia":
+        with open('data/mercia_sentences.txt') as file:
+            texts = file.readlines()
+            theme = "Mercia"
+    return render_template('next_word.html', theme=theme, texts=texts)
+
+@app.route('/python_coach', methods=['GET', 'POST'])
+def python_coach():
+    def random_q(topic=None):
+        import csv
+        import random
+        with open('data/python_fstring_q.csv') as csvfile:
+            reader = csv.DictReader(csvfile)
+            rows = list(reader)
+            row = random.choice(rows)
+            return row
+        
+    mode = request.args.get('mode')
+    if mode == 'q':
+        if form.validate_on_submit():
+            pass
+        else:
+            pass
+        question = random_q()
+        return render_template('python_drill.html', correct="true", clarification_text="", question=question)
+    elif mode == 'mcq':
+        question = {"question_text": "Which of these commands is written correctly?", "answers": ["PRINT('Hello World')", "print(Hello World)", "print 'Hello World'", "print('Hello World')"], "correct": 3}
+        return render_template('python_mcq.html', correct="false", clarification_text="That doesn't have the correct combination of brackets.", question=question)
+    else:
+        return "Bad Mode"
         
     

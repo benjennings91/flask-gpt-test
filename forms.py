@@ -1,5 +1,5 @@
 from flask_wtf import FlaskForm
-from wtforms import PasswordField, SubmitField, RadioField, HiddenField, DecimalField, IntegerField
+from wtforms import PasswordField, SubmitField, RadioField, HiddenField, DecimalField, IntegerField, StringField
 from wtforms.validators import DataRequired
 
 class LoginForm(FlaskForm):
@@ -10,12 +10,18 @@ class abcdForm(FlaskForm):
   abcd = RadioField('Make your choice:', choices=[('A','A'), ('B','B'),('C','C'),('D','D')], default='A')
   submit= SubmitField('Submit')
   
-class pythonHelpForm(FlaskForm):
-  code = HiddenField()
-  submit = SubmitField('Get Help')
-  
 class tradingForm(FlaskForm):
     pounds = DecimalField()
     crypto = IntegerField()
     price = HiddenField()
     submit = SubmitField('Next Round')
+
+class pythonMCQForm(FlaskForm):
+    answer = HiddenField()
+    abcd = RadioField('Answers:', choices=[('A','A'),('B','B'),('C','C'),('D','D')], default='A')
+    submit = SubmitField('Submit')
+    
+class pythonDrillForm(FlaskForm):
+    correct_answer = HiddenField()
+    answer = StringField()
+    submit = SubmitField('Submit')

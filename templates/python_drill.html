@@ -1,0 +1,33 @@
+<html>
+<head>
+<title>Python Drill</title>
+<!--- Start of Bootstrap includes --->
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.7/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-LN+7fdVzj6u52u30Kp6M/trliBMCMKTyK833zpbD+pXdCLuTusPj697FH4R/5mcr" crossorigin="anonymous">
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.7/dist/js/bootstrap.bundle.min.js" integrity="sha384-ndDqU0Gzau9qJ1lfW4pNLlhNTkCfHzAVBReH9diLvGRem5+R9g2FzA8ZGN954O5Q" crossorigin="anonymous"></script>
+<!--- End of Bootstrap includes --->
+</head>
+<body>
+<div class="container">
+        <div class="row text-center">
+            <div class="col-lg-12">
+                <h1 class="display-2">Python Drill Questions</h1>
+            </div>
+        </div>
+        <div class="row text-center">
+            <div class="col-lg-12">
+                {% if correct == "true" %}
+                    <div class="alert alert-success fs-5"><strong>Correct!</strong></div>
+                {% elif correct == "false" %}
+                    <div class="alert alert-danger fs-5"><strong>Incorrect!</strong> {{ clarification_text }}.</div>
+                {% else %}
+                    ERROR
+                {% endif %}
+            </div>
+        </div>
+        <div class="row text-center">
+            <div class="col-lg-12">
+                <p class="fs-5"><strong>Question: </strong><span class="question_text">{{ question.question }}</span></p>
+            </div>
+        </div>
+</div>
+</body>
